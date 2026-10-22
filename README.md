@@ -35,4 +35,4 @@ flutter test
 
 ## Status
 
-Phase 1 (Foundation) is done: project scaffold, folder layout, dependencies, navigation shell and the Command Center layout with empty states. The next phase is the database design. See the [roadmap](docs/roadmap.md).
+Phase 1 (Foundation) is done. Phase 2 (Database) is in progress: the design is decided (offline-first with sync, encrypted finance), and the tables are next. See the [roadmap](docs/roadmap.md#done-so-far).

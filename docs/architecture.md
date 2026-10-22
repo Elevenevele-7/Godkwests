@@ -51,7 +51,7 @@ Features may depend on `core/` and on other features' `domain/` layers, never on
 
 The blueprint requires that **financial calculations, rewards and deductions are decided by trusted application logic, never by the AI**:
 
-1. The client may show a preview of XP or budget effects, but the authoritative values are computed on the server, in Postgres functions or Edge Functions, and written by them.
+1. The client may show a preview of XP effects, but the authoritative values are computed on the server, in Postgres functions or Edge Functions, and written by them. **Exception: finance.** Finance data is end-to-end encrypted, so budget calculations run in tested app code on the device. The device reports only outcomes (for example "within budget today") to the server for rewards. See [database.md](database.md).
 2. Users cannot write score, XP, DP or VP columns directly. Row-level security allows inserting activity records only. Awards are derived from those records.
 3. The AI Council reads a summary of the user's data and returns advice and *suggested* actions. Any suggestion that changes a goal, budget or challenge needs the user's confirmation and passes through the same validated paths.
 4. AI provider keys live only in Edge Function secrets, never in the app.

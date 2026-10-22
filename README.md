@@ -8,6 +8,7 @@ A personal-growth app that combines habit tracking, financial discipline, long-t
 - Architecture and folder layout: [`docs/architecture.md`](docs/architecture.md)
 - Roadmap and open design decisions: [`docs/roadmap.md`](docs/roadmap.md)
 - Learning & build plan (timeline and daily routine): [`docs/learning-plan.md`](docs/learning-plan.md)
+- Database decisions (offline-first, encrypted finance): [`docs/database.md`](docs/database.md)
 
 ## Getting started
 

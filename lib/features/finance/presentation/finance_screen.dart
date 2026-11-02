@@ -45,6 +45,8 @@ class FinanceScreen extends ConsumerWidget {
   }
 }
 
+void _noop() {}
+
 class _SetUp extends StatelessWidget {
   const _SetUp();
 
@@ -63,8 +65,13 @@ class _SetUp extends StatelessWidget {
         'log and stay within it earns XP.',
       ),
       const SizedBox(height: 16),
-      const Card(
-        child: Padding(padding: EdgeInsets.all(16), child: BudgetForm()),
+      Card(
+        child: Padding(
+          padding: EdgeInsets.all(
+            16,
+          ), // Saving switches this tab to the overview by itself.
+          child: BudgetForm(onSaved: _noop),
+        ),
       ),
     ],
   );

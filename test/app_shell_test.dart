@@ -104,4 +104,26 @@ void main() {
     await settle(tester, until: find.textContaining('+1 XP · '));
     await tearDownApp(tester);
   });
+
+  testWidgets('setting up a budget on the Finance tab shows the overview', (
+    tester,
+  ) async {
+    await ProfileRepository(db).save(const Profile(onboarded: true));
+    await pumpApp(tester);
+    await settle(tester, until: find.text('Financial Snapshot'));
+    await tester.tap(find.widgetWithText(NavigationDestination, 'Finance'));
+    await settle(tester, until: find.text('Save budget'));
+
+    final fields = find.byType(TextFormField);
+    await tester.enterText(fields.at(0), '700');
+    await tester.enterText(fields.at(1), '350');
+    await tester.enterText(fields.at(2), '100');
+    await tester.ensureVisible(find.text('Save budget'));
+    await tester.pump();
+    await tester.tap(find.text('Save budget'));
+
+    await settle(tester, until: find.text('Daily allowance'));
+    expect(find.widgetWithText(AppBar, 'Finance'), findsOneWidget);
+    await tearDownApp(tester);
+  });
 }

@@ -12,7 +12,7 @@ Phases follow blueprint §9. Per the blueprint, no new major features are added 
 | 6 | Core engines | Habits, budgets, scoring, penalties, rewards, visions, evolution | Done, with tests |
 | 7 | Learning | PDF/EPUB import, reader, bookmarks, highlights, notes, AI tutor | Built; needs a real phone to try |
 | 8 | AI Council | Advisors, Chamber, coaching style, usage logging | Built; needs Supabase and an Anthropic key |
-| 9 | Testing/release | Calculations, permissions, security, accessibility, performance | Started: 40 automated tests pass |
+| 9 | Testing/release | Calculations, permissions, security, accessibility, performance | Started: 41 automated tests pass |
 
 ## Done so far
 

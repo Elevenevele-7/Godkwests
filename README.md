@@ -37,4 +37,4 @@ flutter test
 
 ## Status
 
-The core app is built: missions, finance, visions, scoring, the Knowledge Hub reader, the AI Council, onboarding and encrypted sync, with 40 automated tests passing. It works fully offline. Sync and the AI Council switch on once a Supabase project is connected. Not yet tried on a real phone or against a live Supabase project; see [roadmap → Not yet verified](docs/roadmap.md#not-yet-verified).
+The core app is built: missions, finance, visions, scoring, the Knowledge Hub reader, the AI Council, onboarding and encrypted sync, with 41 automated tests passing. It works fully offline. Sync and the AI Council switch on once a Supabase project is connected. Not yet tried on a real phone or against a live Supabase project; see [roadmap → Not yet verified](docs/roadmap.md#not-yet-verified).

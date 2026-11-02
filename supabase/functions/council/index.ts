@@ -107,12 +107,12 @@ Deno.serve(async (req) => {
   if (req.method === "OPTIONS") return new Response("ok", { headers: cors });
 
   // Only signed-in users of this project may call the function.
-  const supabase = createClient(
+  const admin = createClient(
     Deno.env.get("SUPABASE_URL")!,
-    Deno.env.get("SUPABASE_ANON_KEY")!,
-    { global: { headers: { Authorization: req.headers.get("Authorization") ?? "" } } },
+    Deno.env.get("SUPABASE_SERVICE_ROLE_KEY")!,
   );
-  const { data: auth } = await supabase.auth.getUser();
+  const token = (req.headers.get("Authorization") ?? "").replace(/^Bearer /, "");
+  const { data: auth } = await admin.auth.getUser(token);
   if (!auth.user) return json({ error: "Sign in to use the AI Council." }, 401);
 
   let body: CouncilRequest;
@@ -178,10 +178,6 @@ Deno.serve(async (req) => {
     }));
 
     // Usage log, so per-user costs can be estimated from real data.
-    const admin = createClient(
-      Deno.env.get("SUPABASE_URL")!,
-      Deno.env.get("SUPABASE_SERVICE_ROLE_KEY")!,
-    );
     await admin.from("council_usage").insert(results.map(({ advisor, response }) => ({
       user_id: auth.user!.id,
       advisor,

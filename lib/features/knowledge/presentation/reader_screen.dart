@@ -8,6 +8,7 @@ import 'package:pdfx/pdfx.dart';
 import '../../../core/clock.dart';
 import '../../../core/database/sync_columns.dart';
 import '../../../core/time/day.dart';
+import '../../council/data/council_service.dart';
 import '../../visions/data/vision_repository.dart';
 import '../data/book_repository.dart';
 import '../domain/book.dart';
@@ -256,10 +257,33 @@ class _ReaderScreenState extends ConsumerState<ReaderScreen> {
             ),
             PopupMenuButton<String>(
               onSelected: (v) {
-                if (v == 'finish') _finish();
+                switch (v) {
+                  case 'finish':
+                    _finish();
+                  case 'summarize':
+                    _tutor(TutorTask.summarize, _chapterText());
+                  case 'quiz':
+                    _tutor(TutorTask.quiz, _chapterText());
+                  case 'ask':
+                    _askAboutPassage();
+                }
               },
-              itemBuilder: (_) => const [
-                PopupMenuItem(value: 'finish', child: Text('Mark as finished')),
+              itemBuilder: (_) => [
+                if (book.format == BookFormat.epub) ...const [
+                  PopupMenuItem(
+                    value: 'summarize',
+                    child: Text('Summarize this chapter'),
+                  ),
+                  PopupMenuItem(value: 'quiz', child: Text('Quiz me')),
+                ] else
+                  const PopupMenuItem(
+                    value: 'ask',
+                    child: Text('Explain a passage'),
+                  ),
+                const PopupMenuItem(
+                  value: 'finish',
+                  child: Text('Mark as finished'),
+                ),
               ],
             ),
           ],
@@ -332,6 +356,14 @@ class _ReaderScreenState extends ConsumerState<ReaderScreen> {
                         );
                       },
                     ),
+                  if (selected != null && selected.trim().isNotEmpty)
+                    ContextMenuButtonItem(
+                      label: 'Explain',
+                      onPressed: () {
+                        state.hideToolbar();
+                        _tutor(TutorTask.explain, selected.trim());
+                      },
+                    ),
                 ],
               );
             },
@@ -384,6 +416,106 @@ class _ReaderScreenState extends ConsumerState<ReaderScreen> {
   }
 
   String? _selection;
+
+  String _chapterText() {
+    final chapters = _chapters;
+    if (chapters == null || chapters.isEmpty) return '';
+    return htmlToText(chapters[_position].HtmlContent ?? '');
+  }
+
+  /// PDFs are shown as page images, so the user types or pastes the passage.
+  Future<void> _askAboutPassage() async {
+    final c = TextEditingController();
+    final passage = await showDialog<String>(
+      context: context,
+      builder: (context) => AlertDialog(
+        title: const Text('Explain a passage'),
+        content: TextField(
+          controller: c,
+          autofocus: true,
+          minLines: 3,
+          maxLines: 8,
+          decoration: const InputDecoration(
+            hintText: 'Type or paste the passage you want explained',
+          ),
+        ),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.pop(context),
+            child: const Text('Cancel'),
+          ),
+          FilledButton(
+            onPressed: () => Navigator.pop(context, c.text.trim()),
+            child: const Text('Explain'),
+          ),
+        ],
+      ),
+    );
+    c.dispose();
+    if (passage != null && passage.isNotEmpty) {
+      await _tutor(TutorTask.explain, passage);
+    }
+  }
+
+  /// Shows the AI tutor's answer in a sheet, with an option to keep it as
+  /// a note on this page or chapter.
+  Future<void> _tutor(TutorTask task, String passage) async {
+    if (passage.trim().isEmpty) return;
+    final answer = ref
+        .read(councilServiceProvider)
+        .tutor(
+          task,
+          passage.length > 12000 ? passage.substring(0, 12000) : passage,
+        );
+    await showModalBottomSheet<void>(
+      context: context,
+      isScrollControlled: true,
+      useSafeArea: true,
+      builder: (context) => FutureBuilder<String>(
+        future: answer,
+        builder: (context, snap) {
+          final text = snap.hasError ? '${snap.error}' : snap.data;
+          return Padding(
+            padding: const EdgeInsets.all(16),
+            child: ListView(
+              shrinkWrap: true,
+              children: [
+                Text(switch (task) {
+                  TutorTask.explain => 'Explanation',
+                  TutorTask.summarize => 'Chapter summary',
+                  TutorTask.quiz => 'Quiz',
+                }, style: Theme.of(context).textTheme.titleLarge),
+                const SizedBox(height: 12),
+                if (text == null)
+                  const Center(child: CircularProgressIndicator())
+                else
+                  SelectableText(text),
+                if (snap.hasData) ...[
+                  const SizedBox(height: 16),
+                  OutlinedButton.icon(
+                    onPressed: () async {
+                      await _repo.addAnnotation(
+                        Annotation(
+                          id: newId(),
+                          bookId: widget.bookId,
+                          kind: AnnotationKind.note,
+                          position: _position,
+                          note: snap.data,
+                        ),
+                      );
+                      if (context.mounted) Navigator.pop(context);
+                    },
+                    icon: const Icon(Icons.note_add_outlined),
+                    label: const Text('Save as note'),
+                  ),
+                ],
+              ],
+            ),
+          );
+        },
+      ),
+    );
+  }
 }
 
 class _ProgressFooter extends StatelessWidget {

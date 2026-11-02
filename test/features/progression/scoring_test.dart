@@ -1,15 +1,15 @@
-import 'package:ascension/core/time/day.dart';
-import 'package:ascension/features/missions/domain/excuse.dart';
-import 'package:ascension/features/missions/domain/habit.dart';
-import 'package:ascension/features/missions/domain/habit_history.dart';
-import 'package:ascension/features/progression/domain/accountability_mode.dart';
-import 'package:ascension/features/progression/domain/day_close.dart';
-import 'package:ascension/features/progression/domain/evolution.dart';
-import 'package:ascension/features/progression/domain/identity.dart';
-import 'package:ascension/features/progression/domain/levels.dart';
-import 'package:ascension/features/progression/domain/reward.dart';
-import 'package:ascension/features/progression/domain/scores.dart';
-import 'package:ascension/features/progression/domain/xp_calculator.dart';
+import 'package:godkwests/core/time/day.dart';
+import 'package:godkwests/features/missions/domain/excuse.dart';
+import 'package:godkwests/features/missions/domain/habit.dart';
+import 'package:godkwests/features/missions/domain/habit_history.dart';
+import 'package:godkwests/features/progression/domain/accountability_mode.dart';
+import 'package:godkwests/features/progression/domain/day_close.dart';
+import 'package:godkwests/features/progression/domain/evolution.dart';
+import 'package:godkwests/features/progression/domain/identity.dart';
+import 'package:godkwests/features/progression/domain/levels.dart';
+import 'package:godkwests/features/progression/domain/reward.dart';
+import 'package:godkwests/features/progression/domain/scores.dart';
+import 'package:godkwests/features/progression/domain/xp_calculator.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 /// Monday 2 November 2026.

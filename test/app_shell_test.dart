@@ -1,7 +1,7 @@
-import 'package:ascension/app/app.dart';
-import 'package:ascension/core/database/app_database.dart';
-import 'package:ascension/features/profile/data/profile_repository.dart';
-import 'package:ascension/features/profile/domain/profile.dart';
+import 'package:godkwests/app/app.dart';
+import 'package:godkwests/core/database/app_database.dart';
+import 'package:godkwests/features/profile/data/profile_repository.dart';
+import 'package:godkwests/features/profile/domain/profile.dart';
 import 'package:drift/drift.dart' show driftRuntimeOptions;
 import 'package:drift/native.dart';
 import 'package:flutter/material.dart';
@@ -35,7 +35,7 @@ void main() {
     await tester.pumpWidget(
       ProviderScope(
         overrides: [databaseProvider.overrideWithValue(db)],
-        child: const AscensionApp(),
+        child: const GodkwestsApp(),
       ),
     );
     await settle(tester, until: find.byType(Scaffold));

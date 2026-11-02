@@ -1,4 +1,4 @@
-import 'package:ascension/features/sync/domain/finance_crypto.dart';
+import 'package:godkwests/features/sync/domain/finance_crypto.dart';
 import 'package:cryptography/cryptography.dart';
 import 'package:flutter_test/flutter_test.dart';
 

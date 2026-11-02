@@ -7,5 +7,5 @@ import 'core/supabase/supabase_bootstrap.dart';
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await SupabaseBootstrap.initialize();
-  runApp(const ProviderScope(child: AscensionApp()));
+  runApp(const ProviderScope(child: GodkwestsApp()));
 }

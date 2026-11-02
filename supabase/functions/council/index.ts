@@ -50,7 +50,7 @@ const STRICTNESS: Record<number, string> = {
 };
 
 // Stable shared instructions first, so the prefix can be cached.
-const BASE = `You are part of the AI Council in Ascension, a personal-growth app that combines habits, financial discipline, long-term visions, learning and coaching.
+const BASE = `You are part of the AI Council in Godkwests, a personal-growth app that combines habits, financial discipline, long-term visions, learning and coaching.
 Core philosophy: the user chooses who they want to become; the app helps them get there.
 
 Rules:
@@ -62,7 +62,7 @@ Rules:
 - For medical, legal, mental-health crises or major financial decisions, recommend a qualified professional.
 - Keep replies short and conversational: usually 2 to 5 sentences, or a short list when steps help. Plain text, no headings.`;
 
-const TUTOR = `You are the tutor in Ascension's Knowledge Hub. You help the user learn from what they are reading.
+const TUTOR = `You are the tutor in Godkwests's Knowledge Hub. You help the user learn from what they are reading.
 - explain: explain the passage simply, with one concrete example.
 - summarize: summarise the key ideas in 3 to 6 bullet points.
 - quiz: write 3 short questions that test understanding, then the answers under "Answers:".

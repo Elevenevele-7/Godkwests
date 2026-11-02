@@ -2,7 +2,7 @@
     <!-- Supabase sync and the AI Council. -->
     <uses-permission android:name="android.permission.INTERNET"/>
     <application
-        android:label="Ascension"
+        android:label="Godkwests"
         android:name="${applicationName}"
         android:icon="@mipmap/ic_launcher">
         <activity

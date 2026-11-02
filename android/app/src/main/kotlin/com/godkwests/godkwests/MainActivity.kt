@@ -1,4 +1,4 @@
-package com.ascension.ascension
+package com.godkwests.godkwests
 
 import io.flutter.embedding.android.FlutterActivity
 

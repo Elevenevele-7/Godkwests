@@ -1,4 +1,4 @@
--- Ascension cloud schema.
+-- Godkwests cloud schema.
 --
 -- The app is offline-first: each device keeps its own SQLite database and
 -- syncs rows here. One generic table holds every synced row, keyed by user,

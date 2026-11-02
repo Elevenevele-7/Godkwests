@@ -1,5 +1,5 @@
-name: ascension
-description: "Ascension — a personal growth system for habits, financial discipline, visions, learning and AI coaching."
+name: godkwests
+description: "Godkwests — a personal growth system for habits, financial discipline, visions, learning and AI coaching."
 # The following line prevents the package from being accidentally published to
 # pub.dev using `flutter pub publish`. This is preferred for private packages.
 publish_to: 'none' # Remove this line if you wish to publish to pub.dev

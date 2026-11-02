@@ -1,10 +1,10 @@
-import 'package:ascension/core/database/app_database.dart';
-import 'package:ascension/features/finance/data/finance_repository.dart';
-import 'package:ascension/features/finance/domain/finance.dart';
-import 'package:ascension/features/missions/data/habit_repository.dart';
-import 'package:ascension/features/missions/domain/habit.dart';
-import 'package:ascension/features/sync/data/sync_service.dart';
-import 'package:ascension/features/sync/domain/finance_crypto.dart';
+import 'package:godkwests/core/database/app_database.dart';
+import 'package:godkwests/features/finance/data/finance_repository.dart';
+import 'package:godkwests/features/finance/domain/finance.dart';
+import 'package:godkwests/features/missions/data/habit_repository.dart';
+import 'package:godkwests/features/missions/domain/habit.dart';
+import 'package:godkwests/features/sync/data/sync_service.dart';
+import 'package:godkwests/features/sync/domain/finance_crypto.dart';
 import 'package:drift/drift.dart' show driftRuntimeOptions;
 import 'package:drift/native.dart';
 import 'package:flutter_test/flutter_test.dart';

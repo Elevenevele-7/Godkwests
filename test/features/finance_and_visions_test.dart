@@ -1,7 +1,7 @@
-import 'package:ascension/core/time/day.dart';
-import 'package:ascension/features/finance/domain/finance.dart';
-import 'package:ascension/features/visions/domain/vision.dart';
-import 'package:ascension/features/visions/domain/vision_points.dart';
+import 'package:godkwests/core/time/day.dart';
+import 'package:godkwests/features/finance/domain/finance.dart';
+import 'package:godkwests/features/visions/domain/vision.dart';
+import 'package:godkwests/features/visions/domain/vision_points.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 final monday = DateTime.utc(2026, 11, 2);

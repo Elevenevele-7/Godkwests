@@ -7,14 +7,14 @@ import '../features/sync/data/supabase_sync.dart';
 import 'router.dart';
 import 'theme/app_theme.dart';
 
-class AscensionApp extends ConsumerStatefulWidget {
-  const AscensionApp({super.key});
+class GodkwestsApp extends ConsumerStatefulWidget {
+  const GodkwestsApp({super.key});
 
   @override
-  ConsumerState<AscensionApp> createState() => _AscensionAppState();
+  ConsumerState<GodkwestsApp> createState() => _GodkwestsAppState();
 }
 
-class _AscensionAppState extends ConsumerState<AscensionApp>
+class _GodkwestsAppState extends ConsumerState<GodkwestsApp>
     with WidgetsBindingObserver {
   @override
   void initState() {
@@ -49,7 +49,7 @@ class _AscensionAppState extends ConsumerState<AscensionApp>
   @override
   Widget build(BuildContext context) {
     return MaterialApp.router(
-      title: 'Ascension',
+      title: 'Godkwests',
       debugShowCheckedModeBanner: false,
       theme: AppTheme.light,
       darkTheme: AppTheme.dark,

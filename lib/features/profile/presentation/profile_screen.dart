@@ -205,6 +205,7 @@ class _Settings extends ConsumerWidget {
         ),
         const SizedBox(height: 16),
         DropdownButtonFormField<Advisor>(
+          isExpanded: true,
           initialValue: profile.advisor,
           decoration: const InputDecoration(labelText: 'Your coach'),
           items: [

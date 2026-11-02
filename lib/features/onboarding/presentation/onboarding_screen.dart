@@ -199,16 +199,23 @@ class _OnboardingScreenState extends ConsumerState<OnboardingScreen> {
                     Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        for (final m in AccountabilityMode.values)
-                          RadioListTile(
-                            value: m,
-                            groupValue: _mode,
-                            onChanged: (v) => setState(() => _mode = v!),
-                            title: Text(m.label),
-                            subtitle: Text(m.description),
+                        RadioGroup<AccountabilityMode>(
+                          groupValue: _mode,
+                          onChanged: (v) => setState(() => _mode = v!),
+                          child: Column(
+                            children: [
+                              for (final m in AccountabilityMode.values)
+                                RadioListTile(
+                                  value: m,
+                                  title: Text(m.label),
+                                  subtitle: Text(m.description),
+                                ),
+                            ],
                           ),
+                        ),
                         const SizedBox(height: 16),
                         DropdownButtonFormField<Advisor>(
+                          isExpanded: true,
                           initialValue: _advisor,
                           decoration: const InputDecoration(
                             labelText: 'Choose your coach',

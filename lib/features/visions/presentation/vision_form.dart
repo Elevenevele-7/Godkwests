@@ -146,6 +146,7 @@ class _VisionFormState extends ConsumerState<VisionForm> {
           ),
           const SizedBox(height: 12),
           DropdownButtonFormField<VisionCategory>(
+            isExpanded: true,
             initialValue: _category,
             decoration: const InputDecoration(labelText: 'Category'),
             items: [

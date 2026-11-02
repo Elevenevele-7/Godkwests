@@ -190,6 +190,7 @@ class _SavingFormState extends ConsumerState<_SavingForm> {
           if (visions.isNotEmpty) ...[
             const SizedBox(height: 12),
             DropdownButtonFormField<String?>(
+              isExpanded: true,
               initialValue: _visionId,
               decoration: const InputDecoration(labelText: 'Toward vision'),
               items: [

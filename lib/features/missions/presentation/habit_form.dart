@@ -206,6 +206,7 @@ class _HabitFormState extends ConsumerState<HabitForm> {
             ),
             const SizedBox(height: 16),
             DropdownButtonFormField<String?>(
+              isExpanded: true,
               initialValue: _area,
               decoration: const InputDecoration(labelText: 'Growth area'),
               items: [
@@ -217,6 +218,7 @@ class _HabitFormState extends ConsumerState<HabitForm> {
             ),
             const SizedBox(height: 12),
             DropdownButtonFormField<String?>(
+              isExpanded: true,
               initialValue: visions.any((v) => v.id == _visionId)
                   ? _visionId
                   : null,

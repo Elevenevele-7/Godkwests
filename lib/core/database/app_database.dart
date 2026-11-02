@@ -39,9 +39,8 @@ class AppDatabase extends _$AppDatabase {
     appMeta,
   )..where((m) => m.key.equals(key))).getSingleOrNull())?.value;
 
-  Future<void> setMeta(String key, String value) => into(
-    appMeta,
-  ).insertOnConflictUpdate(AppMetaRow(key: key, value: value));
+  Future<void> setMeta(String key, String value) =>
+      into(appMeta).insertOnConflictUpdate(AppMetaRow(key: key, value: value));
 }
 
 final databaseProvider = Provider<AppDatabase>((ref) {

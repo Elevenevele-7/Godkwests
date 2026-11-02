@@ -60,6 +60,33 @@ class Vision {
 
   bool get isCompleted => completedOn != null;
 
+  Vision copyWith({
+    String? title,
+    String? why,
+    VisionCategory? category,
+    double? targetValue,
+    String? unit,
+    double? currentValue,
+    DateTime? startedOn,
+    DateTime? deadline,
+    List<Milestone>? milestones,
+    double? ambition,
+    DateTime? completedOn,
+  }) => Vision(
+    id: id,
+    title: title ?? this.title,
+    why: why ?? this.why,
+    category: category ?? this.category,
+    targetValue: targetValue ?? this.targetValue,
+    unit: unit ?? this.unit,
+    currentValue: currentValue ?? this.currentValue,
+    startedOn: startedOn ?? this.startedOn,
+    deadline: deadline ?? this.deadline,
+    milestones: milestones ?? this.milestones,
+    ambition: ambition ?? this.ambition,
+    completedOn: completedOn ?? this.completedOn,
+  );
+
   double get progress {
     if (isCompleted) return 1;
     if (targetValue != null && targetValue! > 0) {

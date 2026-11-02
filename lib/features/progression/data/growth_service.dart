@@ -308,76 +308,45 @@ class GrowthService {
   /// Saves a new vision with its ambition fixed against completed visions.
   Future<void> createVision(Vision draft) async {
     final completed = (await _visions.all()).where((v) => v.isCompleted);
-    final ambition = ambitionFor(
-      category: draft.category,
-      targetValue: draft.targetValue,
-      unit: draft.unit,
-      completed: completed,
-    );
     await _visions.save(
-      Vision(
-        id: draft.id,
-        title: draft.title,
-        why: draft.why,
-        category: draft.category,
-        targetValue: draft.targetValue,
-        unit: draft.unit,
-        currentValue: draft.currentValue,
-        startedOn: draft.startedOn,
-        deadline: draft.deadline,
-        milestones: draft.milestones,
-        ambition: ambition,
+      draft.copyWith(
+        ambition: ambitionFor(
+          category: draft.category,
+          targetValue: draft.targetValue,
+          unit: draft.unit,
+          completed: completed,
+        ),
       ),
     );
   }
 
   Future<void> completeMilestone(Vision vision, Milestone milestone) async {
     if (milestone.isDone) return;
-    final updated = _withMilestones(vision, [
-      for (final m in vision.milestones)
-        m.id == milestone.id
-            ? Milestone(
-                id: m.id,
-                title: m.title,
-                targetValue: m.targetValue,
-                completedOn: _today,
-              )
-            : m,
-    ]);
+    final updated = vision.copyWith(
+      milestones: [
+        for (final m in vision.milestones)
+          m.id == milestone.id
+              ? Milestone(
+                  id: m.id,
+                  title: m.title,
+                  targetValue: m.targetValue,
+                  completedOn: _today,
+                )
+              : m,
+      ],
+    );
     await _visions.save(updated);
     await _rewards.award(milestoneReward(updated, milestone, _today));
   }
 
+  /// Completes [vision]. Its record and VP are permanent from now on.
   Future<void> completeVision(Vision vision) async {
     if (vision.isCompleted) return;
-    await _visions.save(_withMilestones(vision, vision.milestones, done: true));
+    await _visions.save(vision.copyWith(completedOn: _today));
     for (final r in completionRewards(vision, _today)) {
       await _rewards.award(r);
     }
   }
-
-  Future<void> updateVisionProgress(Vision vision, double value) =>
-      _visions.save(_withMilestones(vision, vision.milestones, value: value));
-
-  Vision _withMilestones(
-    Vision v,
-    List<Milestone> ms, {
-    bool done = false,
-    double? value,
-  }) => Vision(
-    id: v.id,
-    title: v.title,
-    why: v.why,
-    category: v.category,
-    targetValue: v.targetValue,
-    unit: v.unit,
-    currentValue: value ?? v.currentValue,
-    startedOn: v.startedOn,
-    deadline: v.deadline,
-    ambition: v.ambition,
-    milestones: ms,
-    completedOn: done ? _today : v.completedOn,
-  );
 }
 
 final growthServiceProvider = Provider(GrowthService.new);

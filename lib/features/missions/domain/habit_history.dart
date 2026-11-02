@@ -84,13 +84,9 @@ class HabitHistory {
     return scheduled == 0 ? null : done / scheduled;
   }
 
-  int missCount(Habit habit, DateTime from, DateTime to, DateTime today) {
-    var n = 0;
-    for (var d = from.dateOnly; !d.isAfter(to.dateOnly); d = d.addDays(1)) {
-      if (isMiss(habit, d, today)) n++;
-    }
-    return n;
-  }
+  /// Unforgiven misses of [habit] in [from]..[to].
+  int missCount(Habit habit, DateTime from, DateTime to, DateTime today) =>
+      unforgivenMisses([habit], from, to, today);
 
   /// Unforgiven misses across [habits] in [from]..[to].
   int unforgivenMisses(

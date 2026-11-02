@@ -12,7 +12,7 @@ The app should be strict enough to encourage accountability, flexible enough to 
 Tracks daily routines, good habits, unwanted habits, streaks, consistency and task completion.
 - Personalized daily missions.
 - Difficulty levels that adapt as users improve.
-- Discipline and Integrity Scores.
+- Discipline Score. *(Integrity Score removed 2026-11-02: self-reported tasks cannot be verified.)*
 - Penalties for missed commitments, with recovery paths.
 
 ### 1.2 Financial Discipline System
@@ -66,7 +66,7 @@ Progress reflects both daily effort and long-term development.
 
 - **XP (Experience Points):** earned through valid daily activities, habits and challenges. The initial design uses a base of 1–5 XP depending on difficulty.
 - **Discipline Score:** consistency in following the user's chosen routines and commitments.
-- **Integrity Score:** how consistently the user follows through on commitments, accounting for legitimate changes in circumstances.
+- ~~**Integrity Score**~~: removed 2026-11-02, because self-reported tasks cannot be verified. Legitimate emergencies are handled with excused days instead (see [scoring-spec.md](scoring-spec.md#4-excused-days)).
 - **Momentum:** recent activity and the user's current rhythm of progress.
 - **DP (Discipline Points):** a rarer reward for exceptional consistency, recovery and difficult achievements.
 - **VP (Vision Points):** reward meaningful long-term achievements, milestones and the completion of ambitious visions.

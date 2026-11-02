@@ -1,5 +1,7 @@
 # Learning & Build Plan
 
+> **Update 2026-11-02:** the app has now been built ahead of this plan (see [roadmap.md](roadmap.md)). Use the weeks below as a **study guide**: in each week, read and change the code that already does that week's task instead of writing it from scratch. For example, in week 4 study `lib/features/missions/presentation/mission_tile.dart` and `lib/features/progression/data/growth_state.dart`, and in week 6 study `lib/core/database/tables.dart` and `supabase/migrations/`.
+
 Assumes you are **new to programming**, study about **2 hours on weekdays and 3–4 hours on one weekend day**, and build together with Claude: Claude writes the harder code, you read it, change it and understand it. More hours or prior experience shorten the timeline. Fewer hours lengthen it.
 
 ## How long will it take?

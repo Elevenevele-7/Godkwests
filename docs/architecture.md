@@ -2,61 +2,75 @@
 
 ## Stack
 
-| Concern        | Choice                                  |
-| -------------- | --------------------------------------- |
-| App            | Flutter (Android, iOS, web)             |
-| Backend        | Supabase (Postgres, Auth, Storage, Edge Functions) |
-| State          | Riverpod (`flutter_riverpod`)           |
-| Navigation     | `go_router`, with a five-tab `StatefulShellRoute` |
-| Formatting     | `intl` (currency such as KSh, dates)    |
-| Testing        | `flutter_test`, `mocktail`              |
+| Concern | Choice |
+| --- | --- |
+| App | Flutter (Android first; iOS and web also build) |
+| On-device database | SQLite via `drift` (offline-first) |
+| Backend | Supabase: Postgres (sync), Auth, Edge Functions |
+| AI | Claude Haiku 5.5 via the `council` Edge Function |
+| Encryption | `cryptography` (AES-256-GCM, Argon2id); keys in `flutter_secure_storage` |
+| Reader | `pdfx` (PDF), `epubx` (EPUB), `file_picker` (import) |
+| State | Riverpod (`flutter_riverpod`) |
+| Navigation | `go_router`: onboarding redirect plus a five-tab `StatefulShellRoute` |
+| Testing | `flutter_test` with in-memory SQLite |
+
+All dependencies are open source under permissive licences (MIT, BSD or Apache 2.0).
 
 ## Folder layout
 
 ```
 lib/
   main.dart                 Entry point: Supabase bootstrap, ProviderScope
-  app/                      App widget, router, bottom-nav shell, theme
+  app/                      App widget (day close + sync on start/resume), router, nav shell, theme
   core/
+    clock.dart              "Now", overridable in tests
     config/                 Compile-time env (Supabase URL and key)
+    database/               Drift tables, database, id helpers
     supabase/               Supabase initialization
+    time/                   Calendar-day helpers
     widgets/                Shared UI building blocks
   features/
-    auth/                   Sign-up, login, sessions
-    onboarding/             Goals, preferences, budget settings, initial routines
+    onboarding/             First-run flow
     home/                   Command Center dashboard
-    missions/               Habits, daily missions, streaks, challenges, evolution
-    finance/                Budgets, allowances, savings goals, accountability
-    visions/                Long-term goals, milestones, Vision Points history
-    knowledge/              Library, reader, highlights, notes, learning paths
-    council/                AI advisors, Council Chamber
-    progression/            XP, levels, scores, DP/VP, penalties and recovery
-    profile/                Identity progress, settings
+    missions/               Habits, completions, excuses, recovery challenges
+    finance/                Budgets, expenses, savings, weekly fun budget
+    visions/                Visions, milestones, VP
+    knowledge/              Library, PDF/EPUB reader, annotations, AI tutor
+    council/                Advisors, offline daily insight, AI chat and Chamber
+    progression/            Scoring rules, reward ledger, growth service and state
+    profile/                Profile, stats, settings, history
+    sync/                   Sign-in, sync engine, finance encryption
 supabase/
-  migrations/               SQL schema, row-level security policies, functions
-  functions/                Edge Functions (trusted scoring, AI Council proxy)
-docs/                       Blueprint, architecture, roadmap
-test/                       Mirrors lib/
+  migrations/               SQL schema and row-level security
+  functions/council/        AI Council and tutor (calls Claude)
+docs/                       Blueprint, specs, setup, roadmap
+test/                       Unit, database and widget tests
 ```
 
-Each feature has three layers:
+Each feature has up to three layers:
 
-- `domain/`: plain Dart entities and rules, with no Flutter or Supabase imports. Scoring and budget calculations live here or on the server, so they can be unit tested.
-- `data/`: repositories that read and write Supabase and map rows to domain entities.
-- `presentation/`: screens, widgets and Riverpod providers.
+- `domain/`: plain Dart models and rules, with no Flutter, database or network imports. **Every scoring rule lives here** (see [scoring-spec.md](scoring-spec.md)), and each one is unit-tested.
+- `data/`: repositories over the drift database, plus services and derived state (Riverpod providers).
+- `presentation/`: screens and widgets.
 
-Features may depend on `core/` and on other features' `domain/` layers, never on another feature's `presentation/` or `data/`.
+A `domain/` layer never imports `data/` or `presentation/`. Features may use each other's `domain/` and `data/` layers, for example the growth service reads habits, visions and finance. Shared screen pieces like `MissionTile` and `VisionTile` are reused across tabs.
+
+## How a day works
+
+1. Ticking a mission calls `GrowthService.completeMission`. It records the completion, computes XP with the spec's formula, and appends a `Reward` to the ledger with a plain-language explanation.
+2. On app start and resume, `closePastDays` settles every day that has ended: miss penalties, the daily budget outcome, perfect weeks, recovery challenges and evolution DP. Every award has a unique key, so running it twice changes nothing.
+3. Screens read `growthStateProvider`, which derives level, Momentum, Discipline, today's missions and identity progress from the database. Nothing is cached that could drift out of date.
 
 ## Trust boundaries
 
-The blueprint requires that **financial calculations, rewards and deductions are decided by trusted application logic, never by the AI**:
+The blueprint requires that **rewards and deductions come from trusted application logic, never from the AI**:
 
-1. The client may show a preview of XP effects, but the authoritative values are computed on the server, in Postgres functions or Edge Functions, and written by them. **Exception: finance.** Finance data is end-to-end encrypted, so budget calculations run in tested app code on the device. The device reports only outcomes (for example "within budget today") to the server for rewards. See [database.md](database.md).
-2. Users cannot write score, XP, DP or VP columns directly. Row-level security allows inserting activity records only. Awards are derived from those records.
-3. The AI Council reads a summary of the user's data and returns advice and *suggested* actions. Any suggestion that changes a goal, budget or challenge needs the user's confirmation and passes through the same validated paths.
-4. AI provider keys live only in Edge Function secrets, never in the app.
-5. Earned VP and completed visions are append-only (achievement permanence).
+1. All awards and penalties are computed by the rule code in `progression/domain` and applied only by `GrowthService`. The AI Council has no path to change points, budgets or goals. Its suggestions are text the user can choose to act on.
+2. Because the app is offline-first, these rules run on the device. A user who tampers with their own phone could inflate only their own score. This is the same reasoning that removed the Integrity Score: self-reported progress can't be proven, so the app doesn't pretend to verify it.
+3. The reward ledger is append-only. VP and completed visions are never revoked. The one exception: XP for a mission un-ticked on the same day.
+4. Finance data is end-to-end encrypted before it syncs. The server and the AI see only status (for example "on track"), never amounts.
+5. The Anthropic API key lives only in Supabase function secrets. The function checks the caller is signed in and logs token usage per user.
 
 ## Configuration
 
-Secrets are passed with `--dart-define-from-file=env.json`; see `env.example.json`. Without them the app runs with no backend so UI work isn't blocked.
+Secrets are passed with `--dart-define-from-file=env.json` (see `env.example.json` and [setup.md](setup.md)). Without them the app runs fully offline.

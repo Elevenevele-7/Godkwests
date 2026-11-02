@@ -9,6 +9,8 @@ A personal-growth app that combines habit tracking, financial discipline, long-t
 - Roadmap and open design decisions: [`docs/roadmap.md`](docs/roadmap.md)
 - Learning & build plan (timeline and daily routine): [`docs/learning-plan.md`](docs/learning-plan.md)
 - Database decisions (offline-first, encrypted finance): [`docs/database.md`](docs/database.md)
+- Scoring rules (XP, levels, penalties, DP, VP): [`docs/scoring-spec.md`](docs/scoring-spec.md)
+- **Setup: run on your phone, connect Supabase and the AI Council: [`docs/setup.md`](docs/setup.md)**
 
 ## Getting started
 
@@ -16,7 +18,7 @@ Requirements: Flutter (stable channel, Dart 3.13+).
 
 ```bash
 flutter pub get
-flutter run            # runs without a backend; screens show empty states
+flutter run            # works fully offline; no account needed
 ```
 
 To connect a Supabase project, copy `env.example.json` to `env.json` (git-ignored), fill in your project URL and publishable key, then:
@@ -35,4 +37,4 @@ flutter test
 
 ## Status
 
-Phase 1 (Foundation) is done. Phase 2 (Database) is in progress: the design is decided (offline-first with sync, encrypted finance), and the tables are next. See the [roadmap](docs/roadmap.md#done-so-far).
+The core app is built: missions, finance, visions, scoring, the Knowledge Hub reader, the AI Council, onboarding and encrypted sync, with 40 automated tests passing. It works fully offline. Sync and the AI Council switch on once a Supabase project is connected. Not yet tried on a real phone or against a live Supabase project; see [roadmap → Not yet verified](docs/roadmap.md#not-yet-verified).
